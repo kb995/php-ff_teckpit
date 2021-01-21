@@ -3,9 +3,9 @@
 class Human
 {
     const MAX_HP = 100;
-    public $name;
-    public $hp = 100;
-    public $attackPoint = 30;
+    private $name;
+    private $hp = 100;
+    private $attackPoint = 30;
 
     public function doAttack($enemy) {
         echo '「'. $this->name . '」の攻撃!' . PHP_EOL;

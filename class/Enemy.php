@@ -3,9 +3,9 @@
 class Enemy
 {
     const MAX_HP = 50;
-    public $name;
-    public $hp = 50;
-    public $attackPoint = 10;
+    private $name;
+    private $hp = 50;
+    private $attackPoint = 10;
 
     public function doAttack($human) {
         echo '「'. $this->name . '」の攻撃!' . PHP_EOL;
