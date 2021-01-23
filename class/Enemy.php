@@ -8,9 +8,9 @@ class Enemy
     private $attackPoint = 10;
 
     public function doAttack($human) {
-        echo '「'. $this->name . '」の攻撃!' . PHP_EOL;
-        echo '「'. $human->name . '」に ' . $this->attackPoint . ' のダメージ！' . PHP_EOL;
-        $human->tookDamage($this->attackPoint);
+        echo '「'. $this->getName() . '」の攻撃!' . PHP_EOL;
+        echo '「'. $human->getName() . '」に ' . $this->getAttackPoint() . ' のダメージ！' . PHP_EOL;
+        $human->tookDamage($this->getAttackPoint());
     }
 
     public function tookDamage($damage)
@@ -20,6 +20,26 @@ class Enemy
         if ($this->hp < 0) {
             $this->hp = 0;
         }
+    }
+
+    public function __construct($name)
+    {
+        $this->name = $name;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getHitPoint()
+    {
+        return $this->hp;
+    }
+
+    public function getAttackPoint()
+    {
+        return $this->attackPoint;
     }
 
 }

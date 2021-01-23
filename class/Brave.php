@@ -6,12 +6,18 @@ class Brave extends Human
     private $hp = self::MAX_HP;
     private $attackPoint = 40;
 
+    public function __construct($name)
+    {
+        parent::__construct($name, $this->hp, $this->attackPoint);
+    }
+
+
     public function doAttack($enemy)
     {
         if (rand(1, 3) === 1) {
-            echo '「' .$this->name . '」のクリティカル!!' . PHP_EOL;
-            echo '「' . $enemy->name . '」 に ' . $this->attackPoint * 1.5 . ' のダメージ!!' . PHP_EOL;
-            $enemy->tookDamage($this->attackPoint * 1.5);
+            echo '「' .$this->getName() . '」のクリティカル!!' . PHP_EOL;
+            echo '「' . $enemy->getName() . '」 に ' . $this->getAttackPoint() * 1.5 . ' のダメージ!!' . PHP_EOL;
+            $enemy->tookDamage($this->getAttackPoint() * 1.5);
         } else {
             parent::doAttack($enemy);
         }
