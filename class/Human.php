@@ -45,7 +45,11 @@ class Human
         return $this->attackPoint;
     }
 
-
-
-
+    public function recoveryDamage($heal, $target)
+    {
+        $this->hp += $heal;
+        if ($this->hp > $target::MAX_HITPOINT) {
+            $this->hp = $target::MAX_HITPOINT;
+        }
+    }
 }

@@ -7,6 +7,13 @@ class Enemy
     private $hp = 50;
     private $attackPoint = 10;
 
+    public function __construct($name, $attackPoint, $hp)
+    {
+        $this->name = $name;
+        $this->hp = $hp;
+        $this->attackPoint = $attackPoint;
+    }
+
     public function doAttack($human) {
         echo '「'. $this->getName() . '」の攻撃!' . PHP_EOL;
         echo '「'. $human->getName() . '」に ' . $this->getAttackPoint() . ' のダメージ！' . PHP_EOL;
@@ -20,11 +27,6 @@ class Enemy
         if ($this->hp < 0) {
             $this->hp = 0;
         }
-    }
-
-    public function __construct($name)
-    {
-        $this->name = $name;
     }
 
     public function getName()
