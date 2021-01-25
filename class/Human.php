@@ -2,20 +2,30 @@
 
 class Human
 {
-    const MAX_HP = 100;
+    const MAX_HITPOINT = 100;
     private $name;
-    private $hp = 100;
-    private $attackPoint = 30;
+    private $hitPoint = 100;
+    private $attackPoint = 40;
 
-    public function __construct($name, $hp = 100, $attackPoint = 20)
+    public function __construct($name, $hitPoint = 100, $attackPoint = 20)
     {
         $this->name = $name;
-        $this->hp = $hp;
+        $this->hitPoint = $hitPoint;
         $this->attackPoint = $attackPoint;
     }
 
 
-    public function doAttack($enemy) {
+    public function doAttack($enemies)
+    {
+        if ($this->hitPoint <= 0) {
+            return false;
+        }
+
+
+        $enemyIndex = rand(0, count($enemies) - 1);
+        $enemy = $enemies[$enemyIndex];
+
+
         echo '「'. $this->getName() . '」の攻撃!' . PHP_EOL;
         echo '「'. $enemy->getName() . '」に ' . $this->getAttackPoint() . ' のダメージ！' . PHP_EOL;
         $enemy->tookDamage($this->attackPoint);
@@ -23,10 +33,10 @@ class Human
 
     public function tookDamage($damage)
     {
-        $this->hp -= $damage;
+        $this->hitPoint -= $damage;
 
-        if ($this->hp < 0) {
-            $this->hp = 0;
+        if ($this->hitPoint < 0) {
+            $this->hitPoint = 0;
         }
     }
 
@@ -37,7 +47,7 @@ class Human
 
     public function getHitPoint()
     {
-        return $this->hp;
+        return $this->hitPoint;
     }
 
     public function getAttackPoint()
@@ -47,9 +57,9 @@ class Human
 
     public function recoveryDamage($heal, $target)
     {
-        $this->hp += $heal;
-        if ($this->hp > $target::MAX_HITPOINT) {
-            $this->hp = $target::MAX_HITPOINT;
+        $this->hitPoint += $heal;
+        if ($this->hitPoint > $target::MAX_HITPOINT) {
+            $this->hitPoint = $target::MAX_HITPOINT;
         }
     }
 }

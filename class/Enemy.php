@@ -2,19 +2,27 @@
 
 class Enemy
 {
-    const MAX_HP = 50;
+    const MAX_HITPOINT = 50;
     private $name;
-    private $hp = 50;
+    private $hitPoint = 50;
     private $attackPoint = 10;
 
-    public function __construct($name, $attackPoint, $hp)
+    public function __construct($name, $attackPoint, $hitPoint)
     {
         $this->name = $name;
-        $this->hp = $hp;
+        $this->hitPoint = $hitPoint;
         $this->attackPoint = $attackPoint;
     }
 
-    public function doAttack($human) {
+    public function doAttack($humans)
+     {
+        if ($this->hitPoint <= 0) {
+            return false;
+        }
+
+        $humanIndex = rand(0, count($humans) - 1);
+        $human = $humans[$humanIndex];
+
         echo '「'. $this->getName() . '」の攻撃!' . PHP_EOL;
         echo '「'. $human->getName() . '」に ' . $this->getAttackPoint() . ' のダメージ！' . PHP_EOL;
         $human->tookDamage($this->getAttackPoint());
@@ -22,10 +30,10 @@ class Enemy
 
     public function tookDamage($damage)
     {
-        $this->hp -= $damage;
+        $this->hitPoint -= $damage;
 
-        if ($this->hp < 0) {
-            $this->hp = 0;
+        if ($this->hitPoint < 0) {
+            $this->hitPoint = 0;
         }
     }
 
@@ -36,7 +44,7 @@ class Enemy
 
     public function getHitPoint()
     {
-        return $this->hp;
+        return $this->hitPoint;
     }
 
     public function getAttackPoint()
