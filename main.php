@@ -1,10 +1,12 @@
 <?php
-
+require_once('./class/Lives.php');
 require_once('./class/Human.php');
 require_once('./class/Enemy.php');
 require_once('./class/Brave.php');
 require_once('./class/BlackMage.php');
 require_once('./class/WhiteMage.php');
+require_once('./class/Message.php');
+
 
 $members = array();
 $members[] = new Brave('ティーダ');
@@ -19,42 +21,54 @@ $enemies[] = new Enemy('モルボル', 30, 100);
 $turn_count = 1;
 
 echo '★★★★★ 戦闘開始 ★★★★★' . PHP_EOL;
+
 $isFinishFlg = false;
+
+$messageObj = new Message;
+
+// 全滅判定関数
+function isFinish($objects)
+  {
+      $deathCnt = 0;
+      foreach ($objects as $object) {
+          if ($object->getHitPoint() > 0) {
+              return false;
+          }
+          $deathCnt++;
+      }
+      if ($deathCnt === count($objects)) {
+          return true;
+      }
+  }
 
 while (!$isFinishFlg) {
 
-    // ステータス表示
     echo '-----------------' . PHP_EOL;
     echo $turn_count . 'ターン目' . PHP_EOL . PHP_EOL;
 
-    foreach ($members as $member) {
-        echo $member->getName() . ':' . $member->getHitPoint() . '/' . $member::MAX_HITPOINT  . PHP_EOL;
-    }
-
-    foreach ($enemies as $enemy) {
-    echo $enemy->getName() . ':' . $enemy->getHitPoint() . '/' . $enemy::MAX_HITPOINT  . PHP_EOL;
-    }
+    // ステータス表示
+    $messageObj->displayStatusMessage($members);
+    $messageObj->displayStatusMessage($enemies);
 
     echo '-----------------' . PHP_EOL;
     echo PHP_EOL;
 
-    // 攻撃
-    foreach ($members as $member) {
-        // 白魔道士の場合、味方のオブジェクトも渡す
-        if (get_class($member) == 'WhiteMage') {
-            $attackResult = $member->doAttackWhiteMage($enemies, $members);
-        } else {
-            $attackResult = $member->doAttack($enemies);
-        }
-       echo PHP_EOL;
-    }
-    echo PHP_EOL;
+    // 攻撃処理
+    $messageObj->displayAttackMessage($members, $enemies);
+    $messageObj->displayAttackMessage($enemies, $members);
 
-    foreach ($enemies as $enemy) {
-        $enemy->doAttack($members);
-        echo PHP_EOL;
+    // 全滅チェック
+    $isFinishFlg = isFinish($members);
+    if ($isFinishFlg) {
+        $message = 'GAME OVER ....' . PHP_EOL;
+        break;
     }
-    echo PHP_EOL;
+
+    $isFinishFlg = isFinish($enemies);
+    if ($isFinishFlg) {
+        $message = '♪♪♪ファンファーレ♪♪♪';
+        break;
+    }
 
         // 仲間の全滅チェック
         $deathCnt = 0;
@@ -68,36 +82,17 @@ while (!$isFinishFlg) {
 
         if ($deathCnt === count($members)) {
             $isFinishFlg = true;
-            echo 'GAME OVER ....' . PHP_EOL . PHP_EOL;
+            echo 'GAME OVER ....' . PHP_EOL;
             break;
         }
-
-    // 敵の全滅チェック
-    $deathCnt = 0;
-
-    foreach ($enemies as $enemy) {
-        if ($enemy->getHitPoint() > 0) {
-            $isFinishFlg = false;
-            break;
-        }
-        $deathCnt++;
-    }
-
-    if ($deathCnt === count($enemies)) {
-        $isFinishFlg = true;
-        echo '♪♪♪ファンファーレ♪♪♪' . PHP_EOL . PHP_EOL;
-        break;
-    }
 
     $turn_count++;
 }
 
 echo '★★★★★ 戦闘終了 ★★★★★' . PHP_EOL;
 
-foreach ($members as $member) {
-    echo $member->getName() . ':' . $member->getHitPoint() . '/' . $member::MAX_HITPOINT  . PHP_EOL;
-}
-echo PHP_EOL;
-foreach ($enemies as $enemy) {
-    echo $enemy->getName() . ':' . $enemy->getHitPoint() . '/' . $enemy::MAX_HITPOINT  . PHP_EOL;
-}
+echo $message;
+
+// ステータス表示
+$messageObj->displayStatusMessage($members);
+$messageObj->displayStatusMessage($enemies);
